@@ -1,3 +1,5 @@
+// [name]: exercise name
+// [notes]: any notes user makes about the given exercise
 class Exercise {
   final String name;
   final String notes;
@@ -8,12 +10,13 @@ class Exercise {
   });
 }
 
+// Class represeting all the state
 class AppState {
-  final List<Exercise> exercisesList;
+  final List<Exercise> exerciseList;
 
   AppState({
-    required this.exercisesList,
+    required this.exerciseList,
   });
 
-  AppState.initialState() : exercisesList = [];
+  AppState.initialState() : exerciseList = [];
 }
