@@ -1,7 +1,21 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:redux/redux.dart';
+
+import 'package:app_3_redux/model/model.dart';
+import 'package:app_3_redux/redux/actions.dart';
+import 'package:app_3_redux/redux/reducers.dart';
+
 void main() {
-  runApp(const MainApp());
+  final Store<AppState> store = Store<AppState>(
+    appStateReducer,
+    initialState: AppState.initialState(),
+  );
+  runApp(StoreProvider(
+    store: store,
+    child: MainApp(),
+  ));
 }
 
 class MainApp extends StatelessWidget {
@@ -10,11 +24,101 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
+      home: RootPage(),
+    );
+  }
+}
+
+class RootPage extends StatelessWidget {
+  const RootPage({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: ExercisesPage(),
+    );
+  }
+}
+
+class ExercisesPage extends StatelessWidget {
+  const ExercisesPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: StoreConnector<AppState, _ViewModel>(
+        builder: (context, viewModel) => ListView(
+          children: [
+            AddItemWidget(viewModel),
+            ItemListWidget(viewModel),
+          ],
         ),
+        converter: (store) => _ViewModel(store),
       ),
+    );
+  }
+}
+
+class _ViewModel {
+  final List<Exercise> exerciseList;
+
+  final Function(Exercise exercise) onAddExercise;
+  final Function(Exercise exerciseToEdit, Exercise updatedExercise)
+      onEditExercise;
+  final Function(Exercise exercise) onRemoveExercise;
+
+  _ViewModel(Store<AppState> store)
+      : exerciseList = store.state.exerciseList,
+        onAddExercise =
+            ((exercise) => store.dispatch(AddExerciseAction(exercise))),
+        onEditExercise = ((exerciseToEdit, updatedExercise) => store
+            .dispatch(EditExerciseAction(exerciseToEdit, updatedExercise))),
+        onRemoveExercise =
+            ((exercise) => store.dispatch(RemoveExerciseAction(exercise)));
+}
+
+class AddItemWidget extends StatefulWidget {
+  final _ViewModel _viewModel;
+  const AddItemWidget(this._viewModel, {super.key});
+
+  @override
+  State<AddItemWidget> createState() => _AddItemWidgetState();
+}
+
+class _AddItemWidgetState extends State<AddItemWidget> {
+  final TextEditingController _controller = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: _controller,
+      decoration: const InputDecoration(
+        hintText: 'Add an exercise',
+      ),
+      onSubmitted: (value) {
+        widget._viewModel.onAddExercise(
+          Exercise(name: value, notes: ''),
+        );
+        _controller.text = '';
+      },
+    );
+  }
+}
+
+class ItemListWidget extends StatelessWidget {
+  final _ViewModel _viewModel;
+  const ItemListWidget(this._viewModel, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: _viewModel.exerciseList
+          .map(
+            (e) => ListTile(title: Text(e.name)),
+          )
+          .toList(),
     );
   }
 }
