@@ -18,7 +18,11 @@ List<Exercise> exerciseListReducer(
       ..add(action.updatedExercise);
   }
   if (action is RemoveExerciseAction) {
-    return List.from(exerciseList)..remove(action.exercise);
+    return exerciseList
+        .where(
+          (exercise) => exercise != action.exercise,
+        )
+        .toList();
   }
   return exerciseList;
 }
