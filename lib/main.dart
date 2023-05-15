@@ -7,6 +7,8 @@ import 'package:app_3_redux/model/model.dart';
 import 'package:app_3_redux/redux/actions.dart';
 import 'package:app_3_redux/redux/reducers.dart';
 
+import 'package:app_3_redux/pages/ExercisesPage.dart';
+
 void main() {
   final Store<AppState> store = Store<AppState>(
     appStateReducer,
@@ -23,109 +25,45 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: RootPage(),
+    return MaterialApp(
+      home: const RootPage(),
+      theme: ThemeData(useMaterial3: true),
     );
   }
 }
 
-class RootPage extends StatelessWidget {
+class RootPage extends StatefulWidget {
   const RootPage({
     super.key,
   });
 
   @override
+  State<RootPage> createState() => _RootPageState();
+}
+
+class _RootPageState extends State<RootPage> {
+  int _selectedIndex = 0;
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ExercisesPage(),
-    );
-  }
-}
-
-class ExercisesPage extends StatelessWidget {
-  const ExercisesPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: StoreConnector<AppState, _ViewModel>(
-        builder: (context, viewModel) => ListView(
-          children: [
-            AddItemWidget(viewModel),
-            ItemListWidget(viewModel),
-          ],
+      body: const ExercisesPage(),
+      bottomNavigationBar: NavigationBar(
+        destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.bookmarks),
+            label: 'Routines',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.fitness_center),
+            label: 'Exercises',
+          ),
+        ],
+        selectedIndex: _selectedIndex,
+        onDestinationSelected: (value) => setState(
+          () => _selectedIndex = value,
         ),
-        converter: (store) => _ViewModel(store),
       ),
-    );
-  }
-}
-
-class _ViewModel {
-  final List<Exercise> exerciseList;
-
-  final Function(Exercise exercise) onAddExercise;
-  final Function(Exercise exerciseToEdit, Exercise updatedExercise)
-      onEditExercise;
-  final Function(Exercise exercise) onRemoveExercise;
-
-  _ViewModel(Store<AppState> store)
-      : exerciseList = store.state.exerciseList,
-        onAddExercise =
-            ((exercise) => store.dispatch(AddExerciseAction(exercise))),
-        onEditExercise = ((exerciseToEdit, updatedExercise) => store
-            .dispatch(EditExerciseAction(exerciseToEdit, updatedExercise))),
-        onRemoveExercise =
-            ((exercise) => store.dispatch(RemoveExerciseAction(exercise)));
-}
-
-class AddItemWidget extends StatefulWidget {
-  final _ViewModel _viewModel;
-  const AddItemWidget(this._viewModel, {super.key});
-
-  @override
-  State<AddItemWidget> createState() => _AddItemWidgetState();
-}
-
-class _AddItemWidgetState extends State<AddItemWidget> {
-  final TextEditingController _controller = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      controller: _controller,
-      decoration: const InputDecoration(
-        hintText: 'Add an exercise',
-      ),
-      onSubmitted: (value) {
-        widget._viewModel.onAddExercise(
-          Exercise(name: value, notes: 'Exercise'),
-        );
-        _controller.text = '';
-      },
-    );
-  }
-}
-
-class ItemListWidget extends StatelessWidget {
-  final _ViewModel _viewModel;
-  const ItemListWidget(this._viewModel, {super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: _viewModel.exerciseList
-          .map(
-            (e) => ListTile(
-              title: Text(e.name),
-              subtitle: e.notes != '' ? Text(e.notes) : null,
-              leading: IconButton(
-                onPressed: () => _viewModel.onRemoveExercise(e),
-                icon: const Icon(Icons.delete),
-              ),
-            ),
-          )
-          .toList(),
     );
   }
 }
