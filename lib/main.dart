@@ -99,7 +99,7 @@ class _AddItemWidgetState extends State<AddItemWidget> {
       ),
       onSubmitted: (value) {
         widget._viewModel.onAddExercise(
-          Exercise(name: value, notes: ''),
+          Exercise(name: value, notes: 'Exercise'),
         );
         _controller.text = '';
       },
@@ -116,7 +116,14 @@ class ItemListWidget extends StatelessWidget {
     return Column(
       children: _viewModel.exerciseList
           .map(
-            (e) => ListTile(title: Text(e.name)),
+            (e) => ListTile(
+              title: Text(e.name),
+              subtitle: e.notes != '' ? Text(e.notes) : null,
+              leading: IconButton(
+                onPressed: () => _viewModel.onRemoveExercise(e),
+                icon: const Icon(Icons.delete),
+              ),
+            ),
           )
           .toList(),
     );
