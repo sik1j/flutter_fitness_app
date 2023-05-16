@@ -8,6 +8,7 @@ import 'package:app_3_redux/redux/actions.dart';
 import 'package:app_3_redux/redux/reducers.dart';
 
 import 'package:app_3_redux/pages/ExercisesPage.dart';
+import 'package:app_3_redux/pages/RoutinesPage.dart';
 
 void main() {
   final Store<AppState> store = Store<AppState>(
@@ -16,7 +17,7 @@ void main() {
   );
   runApp(StoreProvider(
     store: store,
-    child: MainApp(),
+    child: const MainApp(),
   ));
 }
 
@@ -47,7 +48,10 @@ class _RootPageState extends State<RootPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: const ExercisesPage(),
+      body: [
+        RoutinesPage(),
+        ExercisesPage(),
+      ].elementAt(_selectedIndex),
       bottomNavigationBar: NavigationBar(
         destinations: const [
           NavigationDestination(
