@@ -29,6 +29,15 @@ class AppState {
   });
 
   AppState.initialState()
-      : exerciseList = [],
-        routineList = [];
+      : exerciseList = [
+          Exercise(name: 'Push-Up', notes: 'Chest, Triceps'),
+          Exercise(name: 'Pull-Up', notes: 'Lats, Biceps'),
+          Exercise(name: 'Squat', notes: 'Quads, Glutes'),
+        ],
+        routineList = [
+          Routine(name: '5x5'),
+          Routine(name: 'Push, Pull, Legs'),
+          Routine(name: 'Arnold Split'),
+          Routine(name: 'Bro Split'),
+        ];
 }
