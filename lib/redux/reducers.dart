@@ -4,6 +4,7 @@ import 'package:app_3_redux/redux/actions.dart';
 AppState appStateReducer(AppState state, dynamic action) {
   return AppState(
     exerciseList: exerciseListReducer(state.exerciseList, action),
+    routineList: routineListReducer(state.routineList, action),
   );
 }
 
@@ -25,4 +26,23 @@ List<Exercise> exerciseListReducer(
         .toList();
   }
   return exerciseList;
+}
+
+List<Routine> routineListReducer(List<Routine> routineList, dynamic action) {
+  if (action is AddRoutineAction) {
+    return List.from(routineList)..add(action.routine);
+  }
+  if (action is EditRoutineAction) {
+    return List.from(routineList)
+      ..remove(action.routineToEdit)
+      ..add(action.updatedRoutine);
+  }
+  if (action is RemoveRoutineAction) {
+    return routineList
+        .where(
+          (routine) => routine != action.routine,
+        )
+        .toList();
+  }
+  return routineList;
 }
