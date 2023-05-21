@@ -5,7 +5,6 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
 import 'package:app_3_redux/model/model.dart';
-import 'package:app_3_redux/redux/actions/actions.dart';
 
 class RoutinesPage extends StatelessWidget {
   const RoutinesPage({super.key});

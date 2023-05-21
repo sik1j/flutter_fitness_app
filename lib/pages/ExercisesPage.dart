@@ -5,7 +5,6 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
 import 'package:app_3_redux/model/model.dart';
-import 'package:app_3_redux/redux/actions/actions.dart';
 
 class ExercisesPage extends StatelessWidget {
   const ExercisesPage({super.key});
