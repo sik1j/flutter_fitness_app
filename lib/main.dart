@@ -5,7 +5,7 @@ import 'package:redux/redux.dart';
 
 import 'package:app_3_redux/model/model.dart';
 import 'package:app_3_redux/redux/actions.dart';
-import 'package:app_3_redux/redux/reducers.dart';
+import 'package:app_3_redux/redux/reducers/reducers.dart';
 
 import 'package:app_3_redux/pages/ExercisesPage.dart';
 import 'package:app_3_redux/pages/RoutinesPage.dart';
