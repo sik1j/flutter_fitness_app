@@ -1,4 +1,4 @@
-import 'package:app_3_redux/redux/actions/ExerciseActions.dart';
+import 'package:app_3_redux/redux/actions/exercise_actions.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_redux/flutter_redux.dart';

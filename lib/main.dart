@@ -1,5 +1,5 @@
-import 'package:app_3_redux/redux/actions/ExerciseActions.dart';
-import 'package:app_3_redux/redux/actions/RoutineActions.dart';
+import 'package:app_3_redux/redux/actions/exercise_actions.dart';
+import 'package:app_3_redux/redux/actions/routine_actions.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_redux/flutter_redux.dart';
@@ -8,8 +8,8 @@ import 'package:redux/redux.dart';
 import 'package:app_3_redux/model/model.dart';
 import 'package:app_3_redux/redux/reducers/reducers.dart';
 
-import 'package:app_3_redux/pages/ExercisesPage.dart';
-import 'package:app_3_redux/pages/RoutinesPage.dart';
+import 'package:app_3_redux/pages/exercises_page.dart';
+import 'package:app_3_redux/pages/routines_page.dart';
 
 void main() {
   final Store<AppState> store = Store<AppState>(

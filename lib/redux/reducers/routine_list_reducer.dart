@@ -1,6 +1,6 @@
 import 'package:app_3_redux/model/model.dart';
 
-import '../actions/RoutineActions.dart';
+import 'package:app_3_redux/redux/actions/routine_actions.dart';
 
 List<Routine> routineListReducer(List<Routine> routineList, dynamic action) {
   if (action is AddRoutineAction) {
