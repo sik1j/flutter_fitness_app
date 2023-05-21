@@ -1,10 +1,12 @@
+import 'package:app_3_redux/redux/actions/ExerciseActions.dart';
+import 'package:app_3_redux/redux/actions/RoutineActions.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
 import 'package:app_3_redux/model/model.dart';
-import 'package:app_3_redux/redux/actions.dart';
+import 'package:app_3_redux/redux/actions/actions.dart';
 import 'package:app_3_redux/redux/reducers/reducers.dart';
 
 import 'package:app_3_redux/pages/ExercisesPage.dart';

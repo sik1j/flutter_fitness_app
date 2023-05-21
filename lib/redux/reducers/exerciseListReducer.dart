@@ -1,5 +1,7 @@
 import 'package:app_3_redux/model/model.dart';
-import 'package:app_3_redux/redux/actions.dart';
+import 'package:app_3_redux/redux/actions/actions.dart';
+
+import '../actions/ExerciseActions.dart';
 
 List<Exercise> exerciseListReducer(
     List<Exercise> exerciseList, dynamic action) {
