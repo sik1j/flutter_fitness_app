@@ -80,16 +80,92 @@ class ItemListWidget extends StatelessWidget {
     return Column(
       children: _viewModel.exerciseList
           .map(
-            (e) => ListTile(
-              title: Text(e.name),
-              subtitle: e.notes != '' ? Text(e.notes) : null,
-              leading: IconButton(
-                onPressed: () => _viewModel.onRemoveExercise(e),
-                icon: const Icon(Icons.delete),
+            (exercise) => GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ExerciseCreateOrEditPage(
+                      exercise: exercise,
+                      onEditExercise: _viewModel.onEditExercise,
+                    ),
+                  ),
+                );
+              },
+              child: ListTile(
+                title: Text(exercise.name),
+                trailing: const Icon(Icons.chevron_right),
+                // contentPadding: EdgeInsets.all(0),
+                // subtitle: e.notes != '' ? Text(e.notes) : null,
+                // leading: IconButton(
+                //   onPressed: () => _viewModel.onRemoveExercise(e),
+                //   icon: const Icon(Icons.delete),
+                // ),
               ),
             ),
           )
           .toList(),
+    );
+  }
+}
+
+class ExerciseCreateOrEditPage extends StatelessWidget {
+  ExerciseCreateOrEditPage({
+    super.key,
+    required this.exercise,
+    required this.onEditExercise,
+  })  : _nameController = TextEditingController.fromValue(
+          TextEditingValue(text: exercise.name),
+        ),
+        _notesController = TextEditingController.fromValue(
+          TextEditingValue(text: exercise.notes ?? ''),
+        );
+
+  final Exercise exercise;
+  final Function(Exercise, Exercise) onEditExercise;
+
+  final TextEditingController _nameController;
+  final TextEditingController _notesController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          onPressed: () {
+            onEditExercise(
+              exercise,
+              Exercise(
+                  name: _nameController.text, notes: _notesController.text),
+            );
+            Navigator.pop(context);
+          },
+          icon: const Icon(Icons.arrow_back_ios),
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ListView(
+          children: [
+            TextField(
+              controller: _nameController,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'EXERCISE NAME',
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: _notesController,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'NOTES',
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }
