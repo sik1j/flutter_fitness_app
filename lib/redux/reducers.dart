@@ -13,10 +13,15 @@ List<Exercise> exerciseListReducer(
   if (action is AddExerciseAction) {
     return List.from(exerciseList)..add(action.exercise);
   }
+  // find index of exercise to update
+  // return a copy of list with the exercise to update replaced with
+  // the updated exercise
   if (action is EditExerciseAction) {
+    // return List.from(exerciseList)
+    //   ..remove(action.exerciseToEdit)
+    //   ..add(action.updatedExercise);
     return List.from(exerciseList)
-      ..remove(action.exerciseToEdit)
-      ..add(action.updatedExercise);
+      ..[exerciseList.indexOf(action.exerciseToEdit)] = action.updatedExercise;
   }
   if (action is RemoveExerciseAction) {
     return exerciseList
@@ -33,9 +38,11 @@ List<Routine> routineListReducer(List<Routine> routineList, dynamic action) {
     return List.from(routineList)..add(action.routine);
   }
   if (action is EditRoutineAction) {
+    // return List.from(routineList)
+    //   ..remove(action.routineToEdit)
+    //   ..add(action.updatedRoutine);
     return List.from(routineList)
-      ..remove(action.routineToEdit)
-      ..add(action.updatedRoutine);
+      ..[routineList.indexOf(action.routineToEdit)] = action.updatedRoutine;
   }
   if (action is RemoveRoutineAction) {
     return routineList
