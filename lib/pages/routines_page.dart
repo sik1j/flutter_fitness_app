@@ -82,11 +82,6 @@ class ItemListWidget extends StatelessWidget {
           .map(
             (routine) => ListTile(
               title: Text(routine.name),
-              // leading: IconButton(
-              //   onPressed: () => _viewModel.onRemoveRoutine(routine),
-              //   icon: const Icon(Icons.delete),
-              // ),
-              // trailing: Icon(Icons.edit),
               trailing: IconButton(
                 onPressed: () => Navigator.push(
                   context,
