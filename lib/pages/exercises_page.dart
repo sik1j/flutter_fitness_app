@@ -6,6 +6,8 @@ import 'package:redux/redux.dart';
 
 import 'package:app_3_redux/model/model.dart';
 
+import 'package:app_3_redux/widgets/creation_page_app_bar.dart';
+
 class ExercisesPage extends StatelessWidget {
   const ExercisesPage({super.key});
 
@@ -95,12 +97,6 @@ class ItemListWidget extends StatelessWidget {
               child: ListTile(
                 title: Text(exercise.name),
                 trailing: const Icon(Icons.chevron_right),
-                // contentPadding: EdgeInsets.all(0),
-                // subtitle: e.notes != '' ? Text(e.notes) : null,
-                // leading: IconButton(
-                //   onPressed: () => _viewModel.onRemoveExercise(e),
-                //   icon: const Icon(Icons.delete),
-                // ),
               ),
             ),
           )
@@ -130,18 +126,14 @@ class ExerciseCreateOrEditPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        leading: IconButton(
-          onPressed: () {
-            onEditExercise(
-              exercise,
-              Exercise(
-                  name: _nameController.text, notes: _notesController.text),
-            );
-            Navigator.pop(context);
-          },
-          icon: const Icon(Icons.arrow_back_ios),
+      appBar: CreationPageAppBar(
+        context,
+        onEdit: () => onEditExercise(
+          exercise,
+          Exercise(
+            name: _nameController.text,
+            notes: _notesController.text,
+          ),
         ),
       ),
       body: Padding(

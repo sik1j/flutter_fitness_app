@@ -6,6 +6,8 @@ import 'package:redux/redux.dart';
 
 import 'package:app_3_redux/model/model.dart';
 
+import 'package:app_3_redux/widgets/creation_page_app_bar.dart';
+
 class RoutinesPage extends StatelessWidget {
   const RoutinesPage({super.key});
 
@@ -123,17 +125,13 @@ class RoutineCreateOrEditPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        leading: IconButton(
-          onPressed: () {
-            onEditRoutine(
-              routine,
-              Routine(name: _nameController.text),
-            );
-            Navigator.pop(context);
-          },
-          icon: const Icon(Icons.arrow_back_ios),
+      appBar: CreationPageAppBar(
+        context,
+        onEdit: () => onEditRoutine(
+          routine,
+          Routine(
+            name: _nameController.text,
+          ),
         ),
       ),
       body: Padding(
