@@ -59,27 +59,36 @@ class _RootPageState extends State<RootPage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => _selectedIndex == 0
-                    ? RoutineCreateOrEditPage(
-                        routine: Routine(
-                          name: 'New Routine',
-                        ),
-                        onEditRoutine: (routineToEdit, updatedRoutine) {
-                          viewModel.onAddRoutine(routineToEdit);
-                          viewModel.onEditRoutine(
-                              routineToEdit.id, updatedRoutine);
-                        },
-                      )
-                    : ExerciseCreateOrEditPage(
-                        exercise: Exercise(
-                          name: 'New Exercise',
-                        ),
-                        onEditExercise: (exerciseToEdit, updatedExercise) {
-                          viewModel.onAddExercise(exerciseToEdit);
-                          viewModel.onEditExercise(
-                              exerciseToEdit, updatedExercise);
-                        },
+                builder: (context) {
+                  if (_selectedIndex == 0) {
+                    Routine newRoutine = Routine(
+                      name: 'New Routine',
+                    );
+                    return RoutineCreateOrEditPage(
+                      // routine: Routine(
+                      //   name: 'New Routine',
+                      // ),
+                      routineId: newRoutine.id,
+                      routineList: viewModel.routineList,
+                      onEditRoutine: (routineToEdit, updatedRoutine) {
+                        viewModel.onAddRoutine(routineToEdit);
+                        viewModel.onEditRoutine(
+                            routineToEdit.id, updatedRoutine);
+                      },
+                    );
+                  } else {
+                    return ExerciseCreateOrEditPage(
+                      exercise: Exercise(
+                        name: 'New Exercise',
                       ),
+                      onEditExercise: (exerciseToEdit, updatedExercise) {
+                        viewModel.onAddExercise(exerciseToEdit);
+                        viewModel.onEditExercise(
+                            exerciseToEdit, updatedExercise);
+                      },
+                    );
+                  }
+                },
               ),
             );
           },
@@ -125,8 +134,11 @@ class _ViewModel {
   final Function(int routineToEditId, Routine updatedRoutine) onEditRoutine;
   final Function(Routine routine) onAddRoutine;
 
+  final List<Routine> routineList;
+
   _ViewModel(Store<AppState> store)
-      : onEditExercise = ((exerciseToEdit, updatedExercise) => store
+      : routineList = store.state.routineList,
+        onEditExercise = ((exerciseToEdit, updatedExercise) => store
             .dispatch(EditExerciseAction(exerciseToEdit, updatedExercise))),
         onAddExercise =
             ((exercise) => store.dispatch(AddExerciseAction(exercise))),

@@ -87,7 +87,8 @@ class ItemListWidget extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => RoutineCreateOrEditPage(
-                      routine: routine,
+                      routineId: routine.id,
+                      routineList: _viewModel.routineList,
                       onEditRoutine: (routineToEdit, updatedRoutine) =>
                           _viewModel.onEditRoutine(
                               routineToEdit.id, updatedRoutine),
@@ -106,19 +107,31 @@ class ItemListWidget extends StatelessWidget {
 class RoutineCreateOrEditPage extends StatelessWidget {
   RoutineCreateOrEditPage({
     super.key,
-    required this.routine,
+    required this.routineId,
+    required this.routineList,
     required this.onEditRoutine,
   }) : _nameController = TextEditingController.fromValue(
-          TextEditingValue(text: routine.name),
+          TextEditingValue(
+              text: routineList
+                  .firstWhere(
+                    (routine) => routine.id == routineId,
+                    orElse: () => Routine(name: 'New Exercise', id: routineId),
+                  )
+                  .name),
         );
 
-  final Routine routine;
   final Function(Routine, Routine) onEditRoutine;
+  final int routineId;
+  final List<Routine> routineList;
 
   final TextEditingController _nameController;
 
   @override
   Widget build(BuildContext context) {
+    Routine routine = routineList.firstWhere(
+      (routine) => routine.id == routineId,
+      orElse: () => Routine(name: 'New Exercise', id: routineId),
+    );
     return Scaffold(
       appBar: CreationPageAppBar(
         context,
