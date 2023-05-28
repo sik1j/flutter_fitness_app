@@ -17,13 +17,14 @@ class Exercise {
 // [exercies]: list containing the exercises
 // to be done in a workout
 class Routine {
+  final int id;
   final String name;
   final List<Exercise>? exercises;
 
   Routine({
     required this.name,
     this.exercises,
-  });
+  }) : id = DateTime.now().millisecondsSinceEpoch;
 }
 
 // Class represeting all the state
