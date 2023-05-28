@@ -24,3 +24,14 @@ class RemoveRoutineAction {
 
   RemoveRoutineAction(this.routine);
 }
+
+// when user wants to add an exercise to a routine
+class AddExerciseToRoutineAction {
+  final int routineId;
+  final Exercise exercise;
+
+  AddExerciseToRoutineAction(
+    this.routineId,
+    this.exercise,
+  );
+}
