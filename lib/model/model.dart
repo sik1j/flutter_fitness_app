@@ -17,14 +17,25 @@ class Exercise {
 // [exercies]: list containing the exercises
 // to be done in a workout
 class Routine {
-  final int id;
+  int id;
   final String name;
   final List<Exercise>? exercises;
 
   Routine({
     required this.name,
+    int? id,
     this.exercises,
-  }) : id = DateTime.now().millisecondsSinceEpoch;
+  }) : id = id ?? DateTime.now().millisecondsSinceEpoch;
+
+  Routine copyWith({
+    String? name,
+    List<Exercise>? exercises,
+  }) {
+    return Routine(
+      name: name ?? this.name,
+      exercises: exercises ?? this.exercises,
+    );
+  }
 }
 
 // Class represeting all the state
