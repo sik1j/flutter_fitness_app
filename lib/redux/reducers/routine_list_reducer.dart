@@ -10,8 +10,15 @@ List<Routine> routineListReducer(List<Routine> routineList, dynamic action) {
     // return List.from(routineList)
     //   ..remove(action.routineToEdit)
     //   ..add(action.updatedRoutine);
-    return List.from(routineList)
-      ..[routineList.indexOf(action.routineToEdit)] = action.updatedRoutine;
+    // return List.from(routineList)
+    // ..[routineList.indexOf(action.routineToEdit)] = action.updatedRoutine;
+    return routineList
+        .map(
+          (routine) => routine.id == action.routineToEditId
+              ? action.updatedRoutine
+              : routine,
+        )
+        .toList();
   }
   if (action is RemoveRoutineAction) {
     return routineList

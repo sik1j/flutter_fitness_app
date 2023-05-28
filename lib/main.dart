@@ -67,7 +67,7 @@ class _RootPageState extends State<RootPage> {
                         onEditRoutine: (routineToEdit, updatedRoutine) {
                           viewModel.onAddRoutine(routineToEdit);
                           viewModel.onEditRoutine(
-                              routineToEdit, updatedRoutine);
+                              routineToEdit.id, updatedRoutine);
                         },
                       )
                     : ExerciseCreateOrEditPage(
@@ -122,7 +122,7 @@ class _ViewModel {
       onEditExercise;
   final Function(Exercise exercise) onAddExercise;
 
-  final Function(Routine routineToEdit, Routine updatedRoutine) onEditRoutine;
+  final Function(int routineToEditId, Routine updatedRoutine) onEditRoutine;
   final Function(Routine routine) onAddRoutine;
 
   _ViewModel(Store<AppState> store)
@@ -130,7 +130,7 @@ class _ViewModel {
             .dispatch(EditExerciseAction(exerciseToEdit, updatedExercise))),
         onAddExercise =
             ((exercise) => store.dispatch(AddExerciseAction(exercise))),
-        onEditRoutine = ((routineToEdit, updatedRoutine) =>
-            store.dispatch(EditRoutineAction(routineToEdit, updatedRoutine))),
+        onEditRoutine = ((routineToEditId, updatedRoutine) =>
+            store.dispatch(EditRoutineAction(routineToEditId, updatedRoutine))),
         onAddRoutine = ((routine) => store.dispatch(AddRoutineAction(routine)));
 }

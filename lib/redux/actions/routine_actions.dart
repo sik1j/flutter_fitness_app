@@ -9,11 +9,11 @@ class AddRoutineAction {
 // when user wants to edit a routine
 // replaces the routine to be edited with a new updated routine
 class EditRoutineAction {
-  final Routine routineToEdit;
+  final int routineToEditId;
   final Routine updatedRoutine;
 
   EditRoutineAction(
-    this.routineToEdit,
+    this.routineToEditId,
     this.updatedRoutine,
   );
 }

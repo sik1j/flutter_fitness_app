@@ -31,14 +31,14 @@ class _ViewModel {
   final List<Routine> routineList;
 
   final Function(Routine routine) onAddRoutine;
-  final Function(Routine routineToEdit, Routine updatedRoutine) onEditRoutine;
+  final Function(int routineToEditId, Routine updatedRoutine) onEditRoutine;
   final Function(Routine routine) onRemoveRoutine;
 
   _ViewModel(Store<AppState> store)
       : routineList = store.state.routineList,
         onAddRoutine = ((routine) => store.dispatch(AddRoutineAction(routine))),
-        onEditRoutine = ((routineToEdit, updatedRoutine) =>
-            store.dispatch(EditRoutineAction(routineToEdit, updatedRoutine))),
+        onEditRoutine = ((routineToEditId, updatedRoutine) =>
+            store.dispatch(EditRoutineAction(routineToEditId, updatedRoutine))),
         onRemoveRoutine =
             ((routine) => store.dispatch(RemoveRoutineAction(routine)));
 }
@@ -90,7 +90,7 @@ class ItemListWidget extends StatelessWidget {
                       routine: routine,
                       onEditRoutine: (routineToEdit, updatedRoutine) =>
                           _viewModel.onEditRoutine(
-                              routineToEdit, updatedRoutine),
+                              routineToEdit.id, updatedRoutine),
                     ),
                   ),
                 ),
