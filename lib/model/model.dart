@@ -25,7 +25,8 @@ class Routine {
     required this.name,
     int? id,
     this.exercises,
-  }) : id = id ?? DateTime.now().millisecondsSinceEpoch;
+    // TODO: use a different way to generate ids
+  }) : id = id ?? DateTime.now().microsecondsSinceEpoch;
 
   Routine copyWith({
     String? name,
