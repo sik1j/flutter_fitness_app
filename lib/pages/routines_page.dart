@@ -103,7 +103,7 @@ class ItemListWidget extends StatelessWidget {
   }
 }
 
-class RoutineCreateOrEditPage extends StatelessWidget {
+class RoutineCreateOrEditPage extends StatefulWidget {
   RoutineCreateOrEditPage({
     super.key,
     required this.routine,
@@ -118,15 +118,27 @@ class RoutineCreateOrEditPage extends StatelessWidget {
   final TextEditingController _nameController;
 
   @override
+  State<RoutineCreateOrEditPage> createState() =>
+      _RoutineCreateOrEditPageState();
+}
+
+class _RoutineCreateOrEditPageState extends State<RoutineCreateOrEditPage> {
+  List<Exercise>? _exercises;
+
+  @override
+  void initState() {
+    super.initState();
+    _exercises = widget.routine.exercises;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CreationPageAppBar(
         context,
-        onEdit: () => onEditRoutine(
-          routine,
-          Routine(
-            name: _nameController.text,
-          ),
+        onEdit: () => widget.onEditRoutine(
+          widget.routine,
+          Routine(name: widget._nameController.text, exercises: _exercises),
         ),
       ),
       body: Padding(
@@ -136,7 +148,7 @@ class RoutineCreateOrEditPage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(bottom: 16),
               child: TextField(
-                controller: _nameController,
+                controller: widget._nameController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'EXERCISE NAME',
@@ -149,29 +161,84 @@ class RoutineCreateOrEditPage extends StatelessWidget {
                 border: Border.all(),
                 borderRadius: BorderRadius.circular(4),
               ),
-              child: Column(
-                children: [
-                  if (routine.exercises != null) ...[
-                    for (int i = 0; i < routine.exercises!.length; i++)
-                      ExerciseListTile(
-                          name: routine.exercises![i].name, index: i),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    if (_exercises != null) ...[
+                      for (int i = 0; i < _exercises!.length; i++)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8.0),
+                          child: ExerciseListTile(
+                              name: _exercises![i].name, index: i),
+                        ),
+                    ],
+                    if (_exercises == null) ...[
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('No Exercises Yet'),
+                      )
+                    ]
                   ],
-                  if (routine.exercises == null) ...[
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text('No Exercises Yet'),
-                    )
-                  ]
-                ],
+                ),
               ),
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () async {
+          var selectedExercise = await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ExerciseSelectionPage()),
+          );
+          if (selectedExercise != null) {
+            setState(() {
+              _exercises ??= [];
+              _exercises = [..._exercises!, selectedExercise];
+            });
+          }
+        },
         shape: const CircleBorder(),
         child: const Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+// Page to select exercises
+class ExerciseSelectionPage extends StatefulWidget {
+  const ExerciseSelectionPage({super.key});
+
+  @override
+  State<ExerciseSelectionPage> createState() => _ExerciseSelectionPageState();
+}
+
+class _ExerciseSelectionPageState extends State<ExerciseSelectionPage> {
+  List<Exercise>? _exercisesAdded;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+          title: const Text('Select Exercises'),
+          leading: IconButton(
+            onPressed: () => Navigator.pop(context, _exercisesAdded),
+            icon: const Icon(Icons.arrow_back_ios),
+          )),
+      body: StoreConnector<AppState, List<Exercise>>(
+        builder: (context, viewModel) => ListView(
+          children: [
+            for (int i = 0; i < viewModel.length; i++)
+              ListTile(
+                title: Text(viewModel[i].name),
+                trailing: IconButton(
+                    onPressed: () => Navigator.pop(context, viewModel[i]),
+                    icon: const Icon(Icons.add)),
+              ),
+          ],
+        ),
+        converter: (store) => store.state.exerciseList,
       ),
     );
   }
@@ -196,14 +263,14 @@ class ExerciseListTile extends StatelessWidget {
     return
         // 3 columns, with a title and subtitle
         Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Expanded(
-          child: Column(
-            children: [
-              Text('$index.'),
-              Text(name),
-            ],
-          ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('$index.'),
+            Text(name),
+          ],
         ),
         Column(
           children: [
@@ -211,6 +278,7 @@ class ExerciseListTile extends StatelessWidget {
             Text(reps == null ? '-' : '$reps'),
           ],
         ),
+        SizedBox(width: 16),
         Column(
           children: [
             const Text('Int'),
