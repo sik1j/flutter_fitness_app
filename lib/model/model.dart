@@ -6,10 +6,14 @@
 class Exercise {
   final String name;
   final String? notes;
+  final int? reps;
+  final int? intensity;
 
   Exercise({
     required this.name,
     this.notes,
+    this.reps,
+    this.intensity,
   });
 }
 
