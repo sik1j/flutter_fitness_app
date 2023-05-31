@@ -161,26 +161,36 @@ class _RoutineCreateOrEditPageState extends State<RoutineCreateOrEditPage> {
                 border: Border.all(),
                 borderRadius: BorderRadius.circular(4),
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  children: [
-                    if (_exercises != null) ...[
-                      for (int i = 0; i < _exercises!.length; i++)
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: ExerciseListTile(
-                              name: _exercises![i].name, index: i),
-                        ),
+              child: Column(
+                children: [
+                  if (_exercises != null) ...[
+                    for (int i = 0; i < _exercises!.length; i++) ...[
+                      GestureDetector(
+                        onTap: () async {
+                          _exercises![i] = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => RoutineExerciseEditingPage(
+                                  routineExercise: _exercises![i]),
+                            ),
+                          );
+                        },
+                        child: ExerciseListTile(
+                            name: _exercises![i].name, index: i),
+                      ),
+                      const Divider(
+                        indent: 12,
+                        endIndent: 12,
+                      ),
                     ],
-                    if (_exercises == null) ...[
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text('No Exercises Yet'),
-                      )
-                    ]
                   ],
-                ),
+                  if (_exercises == null) ...[
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text('No Exercises Yet'),
+                    )
+                  ]
+                ],
               ),
             ),
           ],
@@ -190,7 +200,8 @@ class _RoutineCreateOrEditPageState extends State<RoutineCreateOrEditPage> {
         onPressed: () async {
           var selectedExercise = await Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => ExerciseSelectionPage()),
+            MaterialPageRoute(
+                builder: (context) => const ExerciseSelectionPage()),
           );
           if (selectedExercise != null) {
             setState(() {
@@ -268,30 +279,116 @@ class ExerciseListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return
         // 3 columns, with a title and subtitle
-        Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        Container(
+      decoration: BoxDecoration(
+        border: Border.all(),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      // color: Colors.deepPurple.shade200,
+      child: Padding(
+        padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 16),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('$index.'),
-            Text(name),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('$index.'),
+                Text(name),
+              ],
+            ),
+            Column(
+              children: [
+                const Text('Reps'),
+                Text(reps == null ? '-' : '$reps'),
+              ],
+            ),
+            const SizedBox(width: 16),
+            Column(
+              children: [
+                const Text('Int'),
+                Text(intensity == null ? '-' : '$intensity'),
+              ],
+            )
           ],
         ),
-        Column(
-          children: [
-            const Text('Reps'),
-            Text(reps == null ? '-' : '$reps'),
-          ],
+      ),
+    );
+  }
+}
+
+class RoutineExerciseEditingPage extends StatelessWidget {
+  RoutineExerciseEditingPage({
+    required this.routineExercise,
+    super.key,
+  }) : _restTimeInSecondsController = TextEditingController.fromValue(
+          TextEditingValue(
+            text: routineExercise.restTimeInSeconds == null
+                ? ''
+                : routineExercise.restTimeInSeconds.toString(),
+          ),
+        );
+
+  final RoutineExercise routineExercise;
+  TextEditingController _restTimeInSecondsController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Edit Routine'),
+        leading: IconButton(
+          onPressed: () => Navigator.pop(
+            context,
+            RoutineExercise(
+              exercise: routineExercise.exercise,
+              restTimeInSeconds: _restTimeInSecondsController.text == ''
+                  ? null
+                  : int.parse(_restTimeInSecondsController.text),
+            ),
+          ),
+          icon: const Icon(Icons.arrow_back_ios),
         ),
-        SizedBox(width: 16),
-        Column(
-          children: [
-            const Text('Int'),
-            Text(intensity == null ? '-' : '$intensity'),
-          ],
-        )
-      ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(),
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ListView(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(routineExercise.name),
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.change_circle),
+                    ),
+                  ],
+                ),
+                const Divider(),
+                TextField(
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Rest',
+                    hintText: 'Optional',
+                  ),
+                  controller: _restTimeInSecondsController,
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                    signed: false,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
