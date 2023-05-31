@@ -123,7 +123,7 @@ class RoutineCreateOrEditPage extends StatefulWidget {
 }
 
 class _RoutineCreateOrEditPageState extends State<RoutineCreateOrEditPage> {
-  List<Exercise>? _exercises;
+  List<RoutineExercise>? _exercises;
 
   @override
   void initState() {
