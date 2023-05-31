@@ -18,12 +18,12 @@ class Exercise {
 }
 
 // [name]: routine name
-// [exercies]: list containing the exercises
+// [exercises]: list of exercises to be done in a workout
 // to be done in a workout
 class Routine {
   final int id;
   final String name;
-  final List<Exercise>? exercises;
+  final List<RoutineExercise>? exercises;
 
   Routine({
     required this.name,
