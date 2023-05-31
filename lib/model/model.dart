@@ -31,6 +31,16 @@ class Routine {
   }) : id = DateTime.now().millisecondsSinceEpoch;
 }
 
+class RoutineExercise {
+  final Exercise exercise;
+  final int? restTimeInSeconds;
+
+  RoutineExercise({
+    required this.exercise,
+    this.restTimeInSeconds,
+  });
+}
+
 // Class represeting all the state
 class AppState {
   final List<Exercise> exerciseList;
