@@ -215,7 +215,7 @@ class ExerciseSelectionPage extends StatefulWidget {
 }
 
 class _ExerciseSelectionPageState extends State<ExerciseSelectionPage> {
-  List<Exercise>? _exercisesAdded;
+  List<RoutineExercise>? _exercisesAdded;
 
   @override
   Widget build(BuildContext context) {
@@ -233,7 +233,13 @@ class _ExerciseSelectionPageState extends State<ExerciseSelectionPage> {
               ListTile(
                 title: Text(viewModel[i].name),
                 trailing: IconButton(
-                    onPressed: () => Navigator.pop(context, viewModel[i]),
+                    // return the exercise that was selected as a RoutineExercise
+                    onPressed: () => Navigator.pop(
+                          context,
+                          RoutineExercise(
+                            exercise: viewModel[i],
+                          ),
+                        ),
                     icon: const Icon(Icons.add)),
               ),
           ],
