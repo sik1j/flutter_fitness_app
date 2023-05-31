@@ -35,6 +35,8 @@ class RoutineExercise {
   final Exercise exercise;
   final int? restTimeInSeconds;
 
+  String get name => exercise.name;
+
   RoutineExercise({
     required this.exercise,
     this.restTimeInSeconds,
