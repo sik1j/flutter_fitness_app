@@ -1,3 +1,4 @@
+import 'package:app_3_redux/pages/workout_page.dart';
 import 'package:app_3_redux/redux/actions/routine_actions.dart';
 import 'package:flutter/material.dart';
 
@@ -80,21 +81,29 @@ class ItemListWidget extends StatelessWidget {
     return Column(
       children: _viewModel.routineList
           .map(
-            (routine) => ListTile(
-              title: Text(routine.name),
-              trailing: IconButton(
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => RoutineCreateOrEditPage(
-                      routine: routine,
-                      onEditRoutine: (routineToEdit, updatedRoutine) =>
-                          _viewModel.onEditRoutine(
-                              routineToEdit, updatedRoutine),
+            (routine) => GestureDetector(
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => WorkoutPage(routine: routine),
+                ),
+              ),
+              child: ListTile(
+                title: Text(routine.name),
+                trailing: IconButton(
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => RoutineCreateOrEditPage(
+                        routine: routine,
+                        onEditRoutine: (routineToEdit, updatedRoutine) =>
+                            _viewModel.onEditRoutine(
+                                routineToEdit, updatedRoutine),
+                      ),
                     ),
                   ),
+                  icon: const Icon(Icons.edit),
                 ),
-                icon: const Icon(Icons.edit),
               ),
             ),
           )
