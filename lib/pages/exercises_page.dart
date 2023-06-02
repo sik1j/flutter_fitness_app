@@ -1,4 +1,5 @@
 import 'package:app_3_redux/redux/actions/exercise_actions.dart';
+import 'package:app_3_redux/widgets/exercise_list.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_redux/flutter_redux.dart';
@@ -79,28 +80,20 @@ class ItemListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: _viewModel.exerciseList
-          .map(
-            (exercise) => GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ExerciseCreateOrEditPage(
-                      exercise: exercise,
-                      onEditExercise: _viewModel.onEditExercise,
-                    ),
-                  ),
-                );
-              },
-              child: ListTile(
-                title: Text(exercise.name),
-                trailing: const Icon(Icons.chevron_right),
-              ),
+    return ExerciseList(
+      exerciseList: _viewModel.exerciseList,
+      trailing: const Icon(Icons.chevron_right),
+      onTap: (exercise) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ExerciseCreateOrEditPage(
+              exercise: exercise,
+              onEditExercise: _viewModel.onEditExercise,
             ),
-          )
-          .toList(),
+          ),
+        );
+      },
     );
   }
 }

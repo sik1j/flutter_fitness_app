@@ -6,25 +6,41 @@
 class Exercise {
   final String name;
   final String? notes;
+  final int? reps;
+  final int? intensity;
 
   Exercise({
     required this.name,
     this.notes,
+    this.reps,
+    this.intensity,
   });
 }
 
 // [name]: routine name
-// [exercies]: list containing the exercises
+// [exercises]: list of exercises to be done in a workout
 // to be done in a workout
 class Routine {
   final int id;
   final String name;
-  final List<Exercise>? exercises;
+  final List<RoutineExercise>? exercises;
 
   Routine({
     required this.name,
     this.exercises,
   }) : id = DateTime.now().millisecondsSinceEpoch;
+}
+
+class RoutineExercise {
+  final Exercise exercise;
+  final int? restTimeInSeconds;
+
+  String get name => exercise.name;
+
+  RoutineExercise({
+    required this.exercise,
+    this.restTimeInSeconds,
+  });
 }
 
 // Class represeting all the state
