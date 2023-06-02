@@ -1,5 +1,6 @@
 import 'package:app_3_redux/pages/workout_page.dart';
 import 'package:app_3_redux/redux/actions/routine_actions.dart';
+import 'package:app_3_redux/widgets/exercise_list.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_redux/flutter_redux.dart';
@@ -247,22 +248,17 @@ class _ExerciseSelectionPageState extends State<ExerciseSelectionPage> {
             icon: const Icon(Icons.arrow_back_ios),
           )),
       body: StoreConnector<AppState, List<Exercise>>(
-        builder: (context, viewModel) => ListView(
-          children: [
-            for (int i = 0; i < viewModel.length; i++)
-              ListTile(
-                title: Text(viewModel[i].name),
-                trailing: IconButton(
-                    // return the exercise that was selected as a RoutineExercise
-                    onPressed: () => Navigator.pop(
-                          context,
-                          RoutineExercise(
-                            exercise: viewModel[i],
-                          ),
-                        ),
-                    icon: const Icon(Icons.add)),
+        builder: (context, viewModel) => ExerciseList(
+          exerciseList: viewModel,
+          trailing: const Icon(Icons.add),
+          onTap: (exercise) {
+            Navigator.pop(
+              context,
+              RoutineExercise(
+                exercise: exercise,
               ),
-          ],
+            );
+          },
         ),
         converter: (store) => store.state.exerciseList,
       ),
